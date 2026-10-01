@@ -1,20 +1,42 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
-</div>
+# A Special Invitation
 
-# Run and deploy your AI Studio app
-
-This contains everything you need to run your app locally.
-
-View your app in AI Studio: https://ai.studio/apps/d7dd6407-9695-4153-8bfb-101c538e8061
+An interactive, mobile-first invitation built with React, Vite, and Tailwind CSS. It includes a personal photo gallery, attire guide, RSVP flow, signature canvas, audio details, and calendar export.
 
 ## Run Locally
 
-**Prerequisites:**  Node.js
+**Prerequisites:** Node.js 20.19 or newer and npm.
 
+```bash
+npm ci
+npm run dev
+```
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+No environment variables are required.
+
+## Quality checks
+
+```bash
+npm run check
+```
+
+This runs the TypeScript check and creates the production build in `dist/`.
+
+## Deploy to Vercel
+
+### Vercel dashboard
+
+1. Push this repository to GitHub, GitLab, or Bitbucket.
+2. In Vercel, select **Add New → Project** and import the repository.
+3. Vercel will detect the included Vite configuration automatically.
+4. Select **Deploy**. No environment variables need to be added.
+
+The committed `vercel.json` sets npm as the installer, runs `npm run build`, publishes `dist`, and preserves SPA fallback routing.
+
+### Vercel CLI
+
+```bash
+npx vercel          # preview deployment
+npx vercel --prod   # production deployment
+```
+
+After deployment, verify the invitation on a mobile viewport, test audio after a user interaction, complete the RSVP/signature flow, and download the calendar file.

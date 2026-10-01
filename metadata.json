@@ -1,0 +1,7 @@
+{
+  "name": "A Special Invitation - Evans Bwalya",
+  "description": "An interactive digital invitation card by Evans Bwalya with attire guidelines, photo memories, RSVP, and digital signature.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+

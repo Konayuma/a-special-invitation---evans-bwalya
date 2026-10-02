@@ -139,6 +139,10 @@ export default function App() {
         const savedConfig = JSON.parse(saved) as InvitationConfig;
         return {
           ...savedConfig,
+          dateStr:
+            savedConfig.dateStr === 'Saturday, October 24, 2026'
+              ? 'Saturday, October 3, 2026'
+              : savedConfig.dateStr,
           senderName:
             !savedConfig.senderName || savedConfig.senderName === 'Evans Bwalya'
               ? SENDER_NAME
@@ -152,7 +156,7 @@ export default function App() {
       recipientName: 'my love',
       senderName: SENDER_NAME,
       eventTitle: 'A Special Day Dedicated Entirely to Us',
-      dateStr: 'Saturday, October 24, 2026',
+      dateStr: 'Saturday, October 3, 2026',
       timeStr: 'From 10:30 AM into the starlit night',
       locationClue: 'A scenic coastal trail & an intimate candlelit dinner',
       loveLetterIntro: 'I have something special to ask you.',

@@ -99,7 +99,7 @@ export const CustomizeDrawer: React.FC<CustomizeDrawerProps> = ({
               type="text"
               value={formData.dateStr}
               onChange={e => handleChange('dateStr', e.target.value)}
-              placeholder="e.g. Saturday, October 24, 2026"
+              placeholder="e.g. Saturday, October 3, 2026"
               className="mobile-form-control w-full px-3 py-2.5 border border-slate-200 rounded-lg focus:border-rose-500 focus:outline-hidden"
               required
             />

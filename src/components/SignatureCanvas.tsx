@@ -169,6 +169,7 @@ export const SignatureCanvas: React.FC<SignatureProps> = ({
               type="text"
               value={typedName}
               onChange={handleTypeChange}
+              maxLength={100}
               placeholder="Type your beautiful name..."
               className="mobile-form-control w-full text-center text-3xl md:text-4xl py-3 px-4 font-cursive text-rose-700 bg-transparent border-b-2 border-rose-300 focus:border-rose-600 focus:outline-hidden transition-colors placeholder:font-sans placeholder:text-base placeholder:text-rose-300"
               autoComplete="off"

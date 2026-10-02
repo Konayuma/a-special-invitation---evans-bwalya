@@ -16,6 +16,7 @@ import {
   Clock,
   MapPin,
   Sparkles,
+  LoaderCircle,
 } from 'lucide-react';
 
 import portraitRedImg from './assets/images/WhatsApp Image 2026-10-01 at 18.18.02 (1).jpeg';
@@ -131,6 +132,9 @@ export default function App() {
   const [isAudioMuted, setIsAudioMuted] = useState<boolean>(true);
   const [isCustomizeOpen, setIsCustomizeOpen] = useState<boolean>(false);
   const [memories, setMemories] = useState<MemoryItem[]>(DEFAULT_MEMORIES);
+  const [isSubmittingRsvp, setIsSubmittingRsvp] = useState<boolean>(false);
+  const [rsvpError, setRsvpError] = useState<string>('');
+  const submissionIdRef = useRef<string>('');
 
   const [config, setConfig] = useState<InvitationConfig>(() => {
     try {
@@ -260,49 +264,94 @@ export default function App() {
     }));
   };
 
-  const handleSealDate = () => {
-    romanticAudio.playSealStamp();
+  const handleSealDate = async () => {
+    if (!config.partnerResponse.signatureData.trim()) {
+      setRsvpError('Please add your signature before sealing the date.');
+      return;
+    }
 
-    // Trigger full romantic confetti shower
-    confetti({
-      particleCount: 90,
-      spread: 80,
-      origin: { y: 0.5 },
-      colors: ['#e11d48', '#fda4af', '#fbbf24', '#ffffff', '#ec4899'],
-    });
+    setIsSubmittingRsvp(true);
+    setRsvpError('');
 
-    setTimeout(() => {
-      confetti({
-        particleCount: 50,
-        angle: 60,
-        spread: 55,
-        origin: { x: 0 },
-        colors: ['#e11d48', '#f43f5e', '#ffd1dc'],
-      });
-      confetti({
-        particleCount: 50,
-        angle: 120,
-        spread: 55,
-        origin: { x: 1 },
-        colors: ['#e11d48', '#f43f5e', '#ffd1dc'],
-      });
-    }, 250);
+    if (!submissionIdRef.current) {
+      submissionIdRef.current = crypto.randomUUID();
+    }
 
-    setConfig(prev => ({
-      ...prev,
-      partnerResponse: {
-        ...prev.partnerResponse,
-        isConfirmed: true,
-        confirmedAt: new Date().toLocaleDateString('en-US', {
-          month: 'long',
-          day: 'numeric',
-          year: 'numeric',
+    try {
+      const response = await fetch('/api/send-rsvp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          invitationTitle: config.eventTitle,
+          recipientName: config.recipientName,
+          selectedOptions: config.partnerResponse.selectedOptions,
+          note: config.partnerResponse.note,
+          signatureType: config.partnerResponse.signatureType,
+          signatureData: config.partnerResponse.signatureData,
+          eventDate: config.dateStr,
+          eventTime: config.timeStr,
+          submissionId: submissionIdRef.current,
         }),
-      },
-    }));
+      });
+
+      const result = (await response.json().catch(() => ({}))) as { error?: string };
+      if (!response.ok) {
+        throw new Error(result.error || 'Your RSVP could not be sent. Please try again.');
+      }
+
+      romanticAudio.playSealStamp();
+
+      // Trigger full romantic confetti shower
+      confetti({
+        particleCount: 90,
+        spread: 80,
+        origin: { y: 0.5 },
+        colors: ['#e11d48', '#fda4af', '#fbbf24', '#ffffff', '#ec4899'],
+      });
+
+      setTimeout(() => {
+        confetti({
+          particleCount: 50,
+          angle: 60,
+          spread: 55,
+          origin: { x: 0 },
+          colors: ['#e11d48', '#f43f5e', '#ffd1dc'],
+        });
+        confetti({
+          particleCount: 50,
+          angle: 120,
+          spread: 55,
+          origin: { x: 1 },
+          colors: ['#e11d48', '#f43f5e', '#ffd1dc'],
+        });
+      }, 250);
+
+      setConfig(prev => ({
+        ...prev,
+        partnerResponse: {
+          ...prev.partnerResponse,
+          isConfirmed: true,
+          confirmedAt: new Date().toLocaleDateString('en-US', {
+            month: 'long',
+            day: 'numeric',
+            year: 'numeric',
+          }),
+        },
+      }));
+    } catch (error) {
+      setRsvpError(
+        error instanceof Error
+          ? error.message
+          : 'Your RSVP could not be sent. Please try again.'
+      );
+    } finally {
+      setIsSubmittingRsvp(false);
+    }
   };
 
   const handleEditRsvp = () => {
+    submissionIdRef.current = '';
+    setRsvpError('');
     setConfig(prev => ({
       ...prev,
       partnerResponse: {
@@ -582,6 +631,7 @@ export default function App() {
                 <input
                   type="text"
                   value={config.partnerResponse.note}
+                  maxLength={1000}
                   onChange={e =>
                     setConfig(prev => ({
                       ...prev,
@@ -647,11 +697,27 @@ export default function App() {
                   <button
                     type="button"
                     onClick={handleSealDate}
-                    className="w-full max-w-xs py-3 px-6 rounded-full bg-linear-to-r from-rose-600 to-rose-700 hover:from-rose-700 hover:to-rose-800 text-white text-sm font-semibold shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 transform hover:-translate-y-0.5"
+                    disabled={isSubmittingRsvp}
+                    className="w-full max-w-xs py-3 px-6 rounded-full bg-linear-to-r from-rose-600 to-rose-700 hover:from-rose-700 hover:to-rose-800 disabled:from-rose-400 disabled:to-rose-500 disabled:cursor-wait text-white text-sm font-semibold shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 transform hover:-translate-y-0.5 disabled:transform-none"
                   >
-                    <Heart className="w-4 h-4 fill-white" />
-                    <span>Seal & Accept Date ❤️</span>
+                    {isSubmittingRsvp ? (
+                      <LoaderCircle className="w-4 h-4 animate-spin" />
+                    ) : (
+                      <Heart className="w-4 h-4 fill-white" />
+                    )}
+                    <span>
+                      {isSubmittingRsvp ? 'Sending your RSVP…' : 'Seal & Accept Date ❤️'}
+                    </span>
                   </button>
+                  <p
+                    className={`mt-2 min-h-4 max-w-xs text-center text-xs ${
+                      rsvpError ? 'text-red-700' : 'text-slate-500'
+                    }`}
+                    role={rsvpError ? 'alert' : 'status'}
+                    aria-live="polite"
+                  >
+                    {rsvpError || 'Your response will be delivered privately to Evans.'}
+                  </p>
                 </div>
               ) : (
                 /* Post-Confirmation Keepsake Certificate */

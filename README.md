@@ -11,7 +11,14 @@ npm ci
 npm run dev
 ```
 
-No environment variables are required.
+To test RSVP email delivery through a local Vercel function, copy `.env.example`
+to `.env.local`, add your Resend API key, and run `npx vercel dev`. The regular
+`npm run dev` command only starts Vite and does not serve the `/api/send-rsvp`
+function.
+
+For initial Resend testing, `onboarding@resend.dev` can be used as the sender.
+Before sharing the production invitation, verify a domain in Resend and change
+`RESEND_FROM_EMAIL` to an address on that domain.
 
 ## Quality checks
 
@@ -28,7 +35,10 @@ This runs the TypeScript check and creates the production build in `dist/`.
 1. Push this repository to GitHub, GitLab, or Bitbucket.
 2. In Vercel, select **Add New → Project** and import the repository.
 3. Vercel will detect the included Vite configuration automatically.
-4. Select **Deploy**. No environment variables need to be added.
+4. Add `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, and `RSVP_TO_EMAIL` in **Project
+   Settings → Environment Variables**. Set `RSVP_TO_EMAIL` to
+   `bradleydimande@gmail.com`.
+5. Select **Deploy**.
 
 The committed `vercel.json` sets npm as the installer, runs `npm run build`, publishes `dist`, and preserves SPA fallback routing.
 
@@ -39,4 +49,6 @@ npx vercel          # preview deployment
 npx vercel --prod   # production deployment
 ```
 
-After deployment, verify the invitation on a mobile viewport, test audio after a user interaction, complete the RSVP/signature flow, and download the calendar file.
+After deployment, verify the invitation on a mobile viewport, test audio after a
+user interaction, complete the RSVP/signature flow, confirm that the RSVP email
+arrives, and download the calendar file.

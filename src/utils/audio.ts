@@ -1,10 +1,26 @@
-// Web Audio API synthesizer for romantic chimes, sounds, and ambient harmony
+// Web Audio effects plus the invitation's ambient song.
+
+const ambientSongUrl = new URL(
+  '../assets/music/Fridayy-When-It-Comes-To-You-(HipHopKit.com).mp3',
+  import.meta.url
+).href;
 
 class RomanticAudioService {
   private ctx: AudioContext | null = null;
   private isMuted: boolean = false;
-  private ambientInterval: number | null = null;
+  private ambientAudio: HTMLAudioElement | null = null;
   private isPlayingAmbient: boolean = false;
+
+  private getAmbientAudio(): HTMLAudioElement | null {
+    if (typeof window === 'undefined') return null;
+    if (!this.ambientAudio) {
+      this.ambientAudio = new Audio(ambientSongUrl);
+      this.ambientAudio.loop = true;
+      this.ambientAudio.preload = 'metadata';
+      this.ambientAudio.volume = 0.3;
+    }
+    return this.ambientAudio;
+  }
 
   private getContext(): AudioContext | null {
     if (typeof window === 'undefined') return null;
@@ -22,6 +38,9 @@ class RomanticAudioService {
 
   public setMuted(muted: boolean) {
     this.isMuted = muted;
+    if (this.ambientAudio) {
+      this.ambientAudio.muted = muted;
+    }
     if (muted && this.isPlayingAmbient) {
       this.stopAmbientMusic();
     }
@@ -129,55 +148,21 @@ class RomanticAudioService {
 
   public startAmbientMusic() {
     if (this.isMuted) return;
-    const ctx = this.getContext();
-    if (!ctx) return;
+    const audio = this.getAmbientAudio();
+    if (!audio) return;
 
+    audio.muted = false;
     this.isPlayingAmbient = true;
-    
-    // Play warm music box chords in loop
-    const chords = [
-      [261.63, 329.63, 392.00, 523.25], // C maj
-      [220.00, 261.63, 329.63, 440.00], // A min
-      [174.61, 220.00, 261.63, 349.23], // F maj
-      [196.00, 246.94, 293.66, 392.00], // G maj
-    ];
-
-    let chordIdx = 0;
-
-    const playChord = () => {
-      if (!this.isPlayingAmbient) return;
-      const currentChord = chords[chordIdx % chords.length];
-      chordIdx++;
-
-      currentChord.forEach((freq, i) => {
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-
-        osc.type = 'sine';
-        osc.frequency.value = freq;
-
-        const time = ctx.currentTime + i * 0.25;
-        gain.gain.setValueAtTime(0.0001, time);
-        gain.gain.linearRampToValueAtTime(0.025, time + 0.1);
-        gain.gain.exponentialRampToValueAtTime(0.0001, time + 1.8);
-
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-
-        osc.start(time);
-        osc.stop(time + 1.9);
-      });
-    };
-
-    playChord();
-    this.ambientInterval = window.setInterval(playChord, 3200);
+    void audio.play().catch(() => {
+      this.isPlayingAmbient = false;
+    });
   }
 
   public stopAmbientMusic() {
     this.isPlayingAmbient = false;
-    if (this.ambientInterval !== null) {
-      clearInterval(this.ambientInterval);
-      this.ambientInterval = null;
+    if (this.ambientAudio) {
+      this.ambientAudio.pause();
+      this.ambientAudio.currentTime = 0;
     }
   }
 }

@@ -15,14 +15,16 @@ export const DateKeepsake: React.FC<DateKeepsakeProps> = ({ config, onEditRsvp }
     config.eventTitle,
     `Romantic date with ${config.senderName}!\nAttire: Active, Casual, Evening Wear.\nLocation Clue: ${config.locationClue}`,
     config.locationClue,
-    config.dateStr
+    config.dateStr,
+    config.senderName
   );
 
   const handleDownloadIcs = () => {
     downloadIcsFile(
       config.eventTitle,
       `Date with ${config.senderName}!\nAttire guidelines: Active Wear, Casual Wear, Evening Wear.\n${config.locationClue}`,
-      config.locationClue
+      config.locationClue,
+      config.senderName
     );
   };
 
@@ -50,7 +52,7 @@ export const DateKeepsake: React.FC<DateKeepsakeProps> = ({ config, onEditRsvp }
       {/* Certificate Frame */}
       <div
         ref={cardRef}
-        className="w-full bg-linear-to-b from-amber-50/60 via-white to-rose-50/50 border-2 border-rose-200/80 rounded-2xl p-5 shadow-lg relative overflow-hidden text-center"
+        className="w-full bg-linear-to-b from-amber-50/60 via-white to-rose-50/50 border-2 border-rose-200/80 rounded-2xl p-4 sm:p-5 shadow-lg relative overflow-hidden text-center"
       >
         {/* Subtle vintage floral watermark corner */}
         <div className="absolute top-2 left-2 text-rose-200/50 text-2xl select-none">❦</div>
@@ -81,15 +83,15 @@ export const DateKeepsake: React.FC<DateKeepsakeProps> = ({ config, onEditRsvp }
 
         {/* Details Grid */}
         <div className="mt-4 py-3 border-y border-dashed border-rose-200/80 space-y-1.5 text-left text-xs">
-          <div className="flex justify-between items-center text-slate-700">
+          <div className="keepsake-detail-row flex justify-between items-start gap-3 text-slate-700">
             <span className="text-slate-500 font-medium">Date & Time:</span>
-            <span className="font-semibold text-rose-900">{config.dateStr}</span>
+            <span className="font-semibold text-right text-rose-900">{config.dateStr}</span>
           </div>
-          <div className="flex justify-between items-center text-slate-700">
+          <div className="keepsake-detail-row flex justify-between items-start gap-3 text-slate-700">
             <span className="text-slate-500 font-medium">Adventure:</span>
-            <span className="text-slate-800">{config.eventTitle}</span>
+            <span className="min-w-0 text-right text-slate-800">{config.eventTitle}</span>
           </div>
-          <div className="flex justify-between items-center text-slate-700">
+          <div className="keepsake-detail-row flex justify-between items-start gap-3 text-slate-700">
             <span className="text-slate-500 font-medium">Attire:</span>
             <span className="text-slate-800">Active · Casual · Evening</span>
           </div>
@@ -104,7 +106,7 @@ export const DateKeepsake: React.FC<DateKeepsakeProps> = ({ config, onEditRsvp }
         <div className="grid grid-cols-2 gap-4 mt-5 pt-1 text-center">
           <div className="flex flex-col items-center">
             <div className="h-10 flex items-center justify-center">
-              <span className="font-cursive text-2xl text-rose-900 font-bold">
+              <span className="font-cursive text-xl sm:text-2xl leading-tight text-rose-900 font-bold break-words">
                 {config.senderName}
               </span>
             </div>

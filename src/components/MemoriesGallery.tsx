@@ -125,7 +125,7 @@ export const MemoriesGallery: React.FC<MemoriesGalleryProps> = ({
       {/* Lightbox Modal */}
       {selectedImage && (
         <div
-          className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 animate-fadeIn"
+          className="mobile-modal fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 animate-fadeIn"
           onClick={() => setSelectedImage(null)}
         >
           <div
@@ -135,7 +135,8 @@ export const MemoriesGallery: React.FC<MemoriesGalleryProps> = ({
             <button
               type="button"
               onClick={() => setSelectedImage(null)}
-              className="absolute top-2 right-2 z-10 w-8 h-8 rounded-full bg-black/60 text-white flex items-center justify-center hover:bg-black transition-colors"
+              className="absolute top-2 right-2 z-10 w-11 h-11 rounded-full bg-black/60 text-white flex items-center justify-center hover:bg-black transition-colors"
+              aria-label="Close photo"
             >
               <X className="w-4 h-4" />
             </button>
@@ -172,11 +173,11 @@ export const MemoriesGallery: React.FC<MemoriesGalleryProps> = ({
       {/* Add Memory Modal */}
       {isAddModalOpen && (
         <div
-          className="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4"
+          className="mobile-modal fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4"
           onClick={() => setIsAddModalOpen(false)}
         >
           <div
-            className="relative max-w-sm w-full bg-white p-5 rounded-2xl shadow-xl border border-rose-100"
+            className="mobile-sheet relative max-w-sm w-full max-h-[92dvh] overflow-y-auto bg-white p-4 sm:p-5 rounded-t-3xl sm:rounded-2xl shadow-xl border border-rose-100"
             onClick={e => e.stopPropagation()}
           >
             <div className="flex items-center justify-between pb-3 border-b border-rose-100">
@@ -186,7 +187,8 @@ export const MemoriesGallery: React.FC<MemoriesGalleryProps> = ({
               <button
                 type="button"
                 onClick={() => setIsAddModalOpen(false)}
-                className="text-slate-400 hover:text-slate-600 p-1"
+                className="mobile-icon-button text-slate-400 hover:text-slate-600"
+                aria-label="Close photo upload"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -238,7 +240,7 @@ export const MemoriesGallery: React.FC<MemoriesGalleryProps> = ({
                   value={newCaption}
                   onChange={e => setNewCaption(e.target.value)}
                   placeholder="e.g. Our favorite sunset"
-                  className="w-full text-xs px-3 py-2 border border-slate-200 rounded-lg focus:border-rose-400 focus:outline-hidden"
+                  className="mobile-form-control w-full text-xs px-3 py-2.5 border border-slate-200 rounded-lg focus:border-rose-400 focus:outline-hidden"
                 />
               </div>
 
@@ -251,7 +253,7 @@ export const MemoriesGallery: React.FC<MemoriesGalleryProps> = ({
                   value={newLocation}
                   onChange={e => setNewLocation(e.target.value)}
                   placeholder="e.g. By the lake / Last summer"
-                  className="w-full text-xs px-3 py-2 border border-slate-200 rounded-lg focus:border-rose-400 focus:outline-hidden"
+                  className="mobile-form-control w-full text-xs px-3 py-2.5 border border-slate-200 rounded-lg focus:border-rose-400 focus:outline-hidden"
                 />
               </div>
 

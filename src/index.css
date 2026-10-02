@@ -26,6 +26,7 @@ html {
 body {
   margin: 0;
   min-width: 320px;
+  overscroll-behavior: none;
 }
 
 button,
@@ -99,6 +100,28 @@ textarea:focus-visible {
     var(--paper);
   background-size: 100% 32px;
   scrollbar-gutter: stable;
+  -webkit-overflow-scrolling: touch;
+}
+
+.header-action,
+.mobile-icon-button {
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ink-button {
+  width: 28px;
+  height: 28px;
+}
+
+.host-signature-name {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  font-size: clamp(1.65rem, 8vw, 2.25rem);
+  line-height: 1.05;
 }
 
 .eyebrow {
@@ -190,9 +213,67 @@ textarea:focus-visible {
 .progress-dot { min-width: 18px; min-height: 36px; background-clip: content-box; padding: 14px 5px; }
 
 @media (max-width: 639px) {
+  html,
+  body,
+  #root {
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .invitation-scene {
+    min-height: 100svh;
+    height: 100dvh;
+  }
+
   .ambient-photo { display: none; }
   .invitation-card { border: 0; border-radius: 0; box-shadow: none; }
-  .cover-photo-wrap { width: min(68vw, 260px); }
+  .invitation-header {
+    padding-top: max(0.5rem, env(safe-area-inset-top));
+  }
+  .invitation-footer {
+    padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
+  }
+  .invitation-body {
+    scrollbar-gutter: auto;
+  }
+  .cover-photo-wrap { width: min(66vw, 250px); }
+  .cover-page { padding-block: 0.35rem; }
+  .heart-seal { right: -14px; }
+  .mobile-modal {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .mobile-sheet {
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+  .mobile-form-control {
+    font-size: 16px;
+  }
+  .memory-grid { gap: 0.5rem; }
+  .memory-card { padding: 0.3rem 0.3rem 0.55rem; }
+  .keepsake-detail-row > :first-child { flex: 0 0 auto; }
+  .keepsake-detail-row > :last-child { overflow-wrap: anywhere; }
+}
+
+@media (max-width: 370px) {
+  .invitation-header { padding-inline: 0.75rem; }
+  .invitation-body { padding-inline: 0.75rem; }
+  .invitation-footer { padding-inline: 0.5rem; }
+  .nav-button { padding-inline: 0.6rem; }
+  .progress-dot { min-width: 16px; padding-inline: 4px; }
+  .formal-card { padding-inline: 1rem; }
+}
+
+@media (max-height: 700px) and (max-width: 639px) {
+  .cover-photo-wrap { width: min(50vw, 205px); }
+  .cover-page .eyebrow { margin-top: 0.75rem; }
+  .cover-page .primary-cta { padding-block: 0.65rem; }
+  .cover-page > div:last-child { margin-top: 0.75rem; }
+}
+
+@media (orientation: landscape) and (max-height: 520px) {
+  .cover-page { justify-content: flex-start; }
+  .cover-photo-wrap { width: 150px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -139,7 +139,7 @@ export const SignatureCanvas: React.FC<SignatureProps> = ({
         <button
           type="button"
           onClick={() => switchTab('type')}
-          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full font-medium transition-all ${
+          className={`min-h-10 flex items-center gap-1.5 px-3 py-1.5 rounded-full font-medium transition-all ${
             activeTab === 'type'
               ? 'bg-rose-600 text-white shadow-xs'
               : 'text-rose-900/70 hover:text-rose-900'
@@ -151,7 +151,7 @@ export const SignatureCanvas: React.FC<SignatureProps> = ({
         <button
           type="button"
           onClick={() => switchTab('draw')}
-          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full font-medium transition-all ${
+          className={`min-h-10 flex items-center gap-1.5 px-3 py-1.5 rounded-full font-medium transition-all ${
             activeTab === 'draw'
               ? 'bg-rose-600 text-white shadow-xs'
               : 'text-rose-900/70 hover:text-rose-900'
@@ -170,7 +170,7 @@ export const SignatureCanvas: React.FC<SignatureProps> = ({
               value={typedName}
               onChange={handleTypeChange}
               placeholder="Type your beautiful name..."
-              className="w-full text-center text-3xl md:text-4xl py-3 px-4 font-cursive text-rose-700 bg-transparent border-b-2 border-rose-300 focus:border-rose-600 focus:outline-hidden transition-colors placeholder:font-sans placeholder:text-base placeholder:text-rose-300"
+              className="mobile-form-control w-full text-center text-3xl md:text-4xl py-3 px-4 font-cursive text-rose-700 bg-transparent border-b-2 border-rose-300 focus:border-rose-600 focus:outline-hidden transition-colors placeholder:font-sans placeholder:text-base placeholder:text-rose-300"
               autoComplete="off"
             />
           </div>
@@ -215,7 +215,7 @@ export const SignatureCanvas: React.FC<SignatureProps> = ({
               <button
                 type="button"
                 onClick={() => setInkColor('#9f1239')}
-                className={`w-5 h-5 rounded-full bg-rose-800 transition-transform ${
+                className={`ink-button rounded-full bg-rose-800 transition-transform ${
                   inkColor === '#9f1239' ? 'scale-125 ring-2 ring-rose-400' : 'opacity-70'
                 }`}
                 title="Rose Ink"
@@ -223,7 +223,7 @@ export const SignatureCanvas: React.FC<SignatureProps> = ({
               <button
                 type="button"
                 onClick={() => setInkColor('#0f172a')}
-                className={`w-5 h-5 rounded-full bg-slate-900 transition-transform ${
+                className={`ink-button rounded-full bg-slate-900 transition-transform ${
                   inkColor === '#0f172a' ? 'scale-125 ring-2 ring-slate-400' : 'opacity-70'
                 }`}
                 title="Black Ink"
@@ -231,7 +231,7 @@ export const SignatureCanvas: React.FC<SignatureProps> = ({
               <button
                 type="button"
                 onClick={() => setInkColor('#1e3a8a')}
-                className={`w-5 h-5 rounded-full bg-blue-900 transition-transform ${
+                className={`ink-button rounded-full bg-blue-900 transition-transform ${
                   inkColor === '#1e3a8a' ? 'scale-125 ring-2 ring-blue-400' : 'opacity-70'
                 }`}
                 title="Navy Ink"

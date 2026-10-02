@@ -36,11 +36,11 @@ export const CustomizeDrawer: React.FC<CustomizeDrawerProps> = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4 animate-fadeIn"
+      className="mobile-modal fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4 animate-fadeIn"
       onClick={onClose}
     >
       <div
-        className="w-full sm:max-w-md bg-white rounded-t-3xl sm:rounded-2xl shadow-2xl border border-rose-100 max-h-[85vh] flex flex-col overflow-hidden animate-slideUp"
+        className="mobile-sheet w-full sm:max-w-md bg-white rounded-t-3xl sm:rounded-2xl shadow-2xl border border-rose-100 max-h-[92dvh] sm:max-h-[85vh] flex flex-col overflow-hidden animate-slideUp"
         onClick={e => e.stopPropagation()}
       >
         {/* Header */}
@@ -54,7 +54,8 @@ export const CustomizeDrawer: React.FC<CustomizeDrawerProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="p-1 rounded-full text-slate-400 hover:text-slate-600"
+            className="mobile-icon-button rounded-full text-slate-400 hover:text-slate-600"
+            aria-label="Close personalization"
           >
             <X className="w-5 h-5" />
           </button>
@@ -71,7 +72,7 @@ export const CustomizeDrawer: React.FC<CustomizeDrawerProps> = ({
               value={formData.recipientName}
               onChange={e => handleChange('recipientName', e.target.value)}
               placeholder="e.g. My Love, Beautiful, Sarah"
-              className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:border-rose-500 focus:outline-hidden"
+              className="mobile-form-control w-full px-3 py-2.5 border border-slate-200 rounded-lg focus:border-rose-500 focus:outline-hidden"
               required
             />
           </div>
@@ -84,8 +85,8 @@ export const CustomizeDrawer: React.FC<CustomizeDrawerProps> = ({
               type="text"
               value={formData.senderName}
               onChange={e => handleChange('senderName', e.target.value)}
-              placeholder="Evans Bwalya"
-              className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:border-rose-500 focus:outline-hidden"
+              placeholder="Evans Bradley Dimande"
+              className="mobile-form-control w-full px-3 py-2.5 border border-slate-200 rounded-lg focus:border-rose-500 focus:outline-hidden"
               required
             />
           </div>
@@ -99,7 +100,7 @@ export const CustomizeDrawer: React.FC<CustomizeDrawerProps> = ({
               value={formData.dateStr}
               onChange={e => handleChange('dateStr', e.target.value)}
               placeholder="e.g. Saturday, October 24, 2026"
-              className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:border-rose-500 focus:outline-hidden"
+              className="mobile-form-control w-full px-3 py-2.5 border border-slate-200 rounded-lg focus:border-rose-500 focus:outline-hidden"
               required
             />
           </div>
@@ -113,7 +114,7 @@ export const CustomizeDrawer: React.FC<CustomizeDrawerProps> = ({
               value={formData.locationClue}
               onChange={e => handleChange('locationClue', e.target.value)}
               placeholder="e.g. A scenic coastal spot & a candlelit garden dinner"
-              className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:border-rose-500 focus:outline-hidden"
+              className="mobile-form-control w-full px-3 py-2.5 border border-slate-200 rounded-lg focus:border-rose-500 focus:outline-hidden"
             />
           </div>
 
@@ -126,7 +127,7 @@ export const CustomizeDrawer: React.FC<CustomizeDrawerProps> = ({
               value={formData.eventTitle}
               onChange={e => handleChange('eventTitle', e.target.value)}
               placeholder="A Day Dedicated Entirely to Us"
-              className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:border-rose-500 focus:outline-hidden"
+              className="mobile-form-control w-full px-3 py-2.5 border border-slate-200 rounded-lg focus:border-rose-500 focus:outline-hidden"
             />
           </div>
 

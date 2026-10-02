@@ -4,7 +4,8 @@ export function generateGoogleCalendarUrl(
   title: string,
   details: string,
   location: string,
-  dateStr: string
+  dateStr: string,
+  senderName: string
 ): string {
   // Try to parse or default to upcoming Saturday
   const base = new Date();
@@ -19,7 +20,7 @@ export function generateGoogleCalendarUrl(
     action: 'TEMPLATE',
     text: title,
     dates: `${startIso}/${endIso}`,
-    details: `${details}\n\nPrepared with love by Evans Bwalya.`,
+    details: `${details}\n\nPrepared with love by ${senderName}.`,
     location: location,
   });
 
@@ -29,7 +30,8 @@ export function generateGoogleCalendarUrl(
 export function downloadIcsFile(
   title: string,
   details: string,
-  location: string
+  location: string,
+  senderName: string
 ) {
   const now = new Date();
   const start = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
@@ -42,7 +44,7 @@ export function downloadIcsFile(
   const icsContent = [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
-    'PRODID:-//Evans Bwalya//Special Date Invitation//EN',
+    `PRODID:-//${senderName}//Special Date Invitation//EN`,
     'CALSCALE:GREGORIAN',
     'METHOD:PUBLISH',
     'BEGIN:VEVENT',

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import confetti from 'canvas-confetti';
 import {
   Heart,
@@ -121,8 +121,10 @@ const DEFAULT_ATTIRES: AttireGuideline[] = [
 ];
 
 const STORAGE_KEY = 'evans_invitation_config_v1';
+const SENDER_NAME = 'Evans Bradley Dimande';
 
 export default function App() {
+  const pageViewportRef = useRef<HTMLElement | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const totalPages = 6;
   const [heartTapCount, setHeartTapCount] = useState<number>(0);
@@ -134,14 +136,21 @@ export default function App() {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
-        return JSON.parse(saved);
+        const savedConfig = JSON.parse(saved) as InvitationConfig;
+        return {
+          ...savedConfig,
+          senderName:
+            !savedConfig.senderName || savedConfig.senderName === 'Evans Bwalya'
+              ? SENDER_NAME
+              : savedConfig.senderName,
+        };
       }
     } catch {
       // Fallback
     }
     return {
       recipientName: 'my love',
-      senderName: 'Evans Bwalya',
+      senderName: SENDER_NAME,
       eventTitle: 'A Special Day Dedicated Entirely to Us',
       dateStr: 'Saturday, October 24, 2026',
       timeStr: 'From 10:30 AM into the starlit night',
@@ -168,6 +177,10 @@ export default function App() {
       // Ignore
     }
   }, [config]);
+
+  useEffect(() => {
+    pageViewportRef.current?.scrollTo({ top: 0, behavior: 'instant' });
+  }, [currentPage]);
 
   // Page navigation
   const navigate = (direction: number) => {
@@ -317,7 +330,7 @@ export default function App() {
       {/* Main Invitation Card Container */}
       <div className="invitation-card relative z-10 w-full max-w-[480px] h-[100dvh] sm:h-[92vh] sm:max-h-[840px] flex flex-col overflow-hidden">
         {/* Top Header Zone */}
-        <header className="invitation-header px-5 py-3.5 flex items-center justify-between shrink-0">
+        <header className="invitation-header px-4 sm:px-5 py-2.5 sm:py-3.5 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-2">
             <span className="font-serif italic text-rose-900 font-semibold text-sm">
               Evans presents
@@ -333,7 +346,7 @@ export default function App() {
             <button
               type="button"
               onClick={toggleSound}
-              className={`p-2 rounded-full transition-colors ${
+              className={`header-action rounded-full transition-colors ${
                 !isAudioMuted
                   ? 'bg-rose-100 text-rose-700'
                   : 'text-slate-400 hover:text-slate-600 hover:bg-rose-50'
@@ -352,7 +365,7 @@ export default function App() {
             <button
               type="button"
               onClick={() => setIsCustomizeOpen(true)}
-              className="p-2 rounded-full text-slate-400 hover:text-slate-700 hover:bg-rose-50 transition-colors"
+              className="header-action rounded-full text-slate-400 hover:text-slate-700 hover:bg-rose-50 transition-colors"
               title="Personalize invitation"
               aria-label="Personalize invitation"
             >
@@ -362,7 +375,7 @@ export default function App() {
         </header>
 
         {/* Card Body - Multi-page viewport */}
-        <main className="invitation-body flex-1 relative overflow-y-auto px-5 sm:px-6 py-5 flex flex-col items-center">
+        <main ref={pageViewportRef} className="invitation-body min-h-0 flex-1 relative overflow-y-auto overscroll-contain px-4 sm:px-6 py-4 sm:py-5 flex flex-col items-center">
           {/* PAGE 1: Greeting */}
           {currentPage === 1 && (
             <div className="cover-page w-full h-full flex flex-col justify-center items-center text-center my-auto animate-fadeIn">
@@ -522,9 +535,11 @@ export default function App() {
                     opt.value
                   );
                   return (
-                    <label
+                    <button
+                      type="button"
                       key={opt.value}
                       onClick={() => toggleRsvpOption(opt.value)}
+                      aria-pressed={isChecked}
                       className={`w-full flex items-center justify-between p-3.5 rounded-xl border cursor-pointer transition-all duration-200 select-none ${
                         isChecked
                           ? 'bg-rose-50/90 border-rose-300 shadow-xs'
@@ -550,7 +565,7 @@ export default function App() {
                         </span>
                       </div>
                       <span className="text-xl">{opt.emoji}</span>
-                    </label>
+                    </button>
                   );
                 })}
               </div>
@@ -606,7 +621,7 @@ export default function App() {
                     <p className="text-xs text-rose-900/80 mb-0.5">
                       With all my love,
                     </p>
-                    <div className="font-cursive text-3xl sm:text-4xl text-rose-900 font-bold tracking-wide">
+                    <div className="host-signature-name font-cursive text-3xl sm:text-4xl text-rose-900 font-bold tracking-wide">
                       {config.senderName}
                     </div>
                   </div>
@@ -643,7 +658,7 @@ export default function App() {
         </main>
 
         {/* Navigation Controls Bar */}
-        <footer className="invitation-footer px-4 sm:px-5 py-3 flex items-center justify-between shrink-0 select-none">
+        <footer className="invitation-footer px-3 sm:px-5 py-2 sm:py-3 flex items-center justify-between shrink-0 select-none">
           <button
             type="button"
             onClick={() => navigate(-1)}

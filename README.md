@@ -16,9 +16,9 @@ to `.env.local`, add your Resend API key, and run `npx vercel dev`. The regular
 `npm run dev` command only starts Vite and does not serve the `/api/send-rsvp`
 function.
 
-For initial Resend testing, `onboarding@resend.dev` can be used as the sender.
-Before sharing the production invitation, verify a domain in Resend and change
-`RESEND_FROM_EMAIL` to an address on that domain.
+Before sending an RSVP, add and verify `sepokonayuma.me` in Resend by installing
+the DNS records shown in the Resend dashboard. The production sender is
+`A Special Invitation <rsvp@sepokonayuma.me>`.
 
 ## Quality checks
 
@@ -36,8 +36,10 @@ This runs the TypeScript check and creates the production build in `dist/`.
 2. In Vercel, select **Add New → Project** and import the repository.
 3. Vercel will detect the included Vite configuration automatically.
 4. Add `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, and `RSVP_TO_EMAIL` in **Project
-   Settings → Environment Variables**. Set `RSVP_TO_EMAIL` to
-   `bradleydimande@gmail.com`.
+   Settings → Environment Variables**. Set `RESEND_FROM_EMAIL` to
+   `A Special Invitation <rsvp@sepokonayuma.me>` and `RSVP_TO_EMAIL` to
+   `bradleydimande@gmail.com,sepokonayuma@gmail.com`. Multiple recipients are
+   separated with commas.
 5. Select **Deploy**.
 
 The committed `vercel.json` sets npm as the installer, runs `npm run build`, publishes `dist`, and preserves SPA fallback routing.

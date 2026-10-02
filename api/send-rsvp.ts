@@ -1,9 +1,15 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { Resend } from 'resend';
 
-const RSVP_TO_EMAIL = process.env.RSVP_TO_EMAIL || 'bradleydimande@gmail.com';
+const RSVP_TO_EMAILS = (
+  process.env.RSVP_TO_EMAIL ||
+  'bradleydimande@gmail.com,sepokonayuma@gmail.com'
+)
+  .split(',')
+  .map(email => email.trim())
+  .filter(Boolean);
 const RESEND_FROM_EMAIL =
-  process.env.RESEND_FROM_EMAIL || 'A Special Invitation <onboarding@resend.dev>';
+  process.env.RESEND_FROM_EMAIL || 'A Special Invitation <rsvp@sepokonayuma.me>';
 const ALLOWED_RESPONSES = new Set(['yes', 'absolutely', 'waiting']);
 const MAX_SIGNATURE_LENGTH = 500_000;
 
@@ -110,7 +116,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const { data, error } = await resend.emails.send(
     {
       from: RESEND_FROM_EMAIL,
-      to: RSVP_TO_EMAIL,
+      to: RSVP_TO_EMAILS,
       subject: `RSVP accepted: ${invitationTitle}`,
       text: [
         `${recipientName} accepted your invitation.`,
